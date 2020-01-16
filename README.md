@@ -2,7 +2,6 @@
 ML for Simons Collaboration: Wave Localization
 
 ## Landscape Ground State Landscape Neural Net (LGSNN)
-## Goal
 The goal of this project is to show case the effectiveness of the landscape function by comparing a simple machine learning architecture (CNN + dense) on different input features.
 
 We observe that after training to predict the ground state eigenvalues $\lambda$,
