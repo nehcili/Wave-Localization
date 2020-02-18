@@ -87,6 +87,7 @@ I removed all the data due to their large size. But they can be easity generated
 - Train the neural network on 2D data
 - Train the neural network on various random potentials
 - Scale up DOS and compare with the usual box counting
+- Can one train $C_1$ and $C_2$?
 - Improving DOS by learning the deciding function in box counting
 - Studying regime in which the landscape starts to fail
 	- x% of the V max?
