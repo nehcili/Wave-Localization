@@ -1,7 +1,7 @@
 # Wave-Localization
 ML for Simons Collaboration: Wave Localization
 
-## The eigenvalue problem
+## 1. The eigenvalue problem
 The goal of this project is to show case the effectiveness of the landscape function by comparing the result of training a simple machine learning architecture (CNN + dense) on different input features ($1/u$ vs $V$).
 
 ### Mathematical Setting
@@ -45,7 +45,7 @@ We trained LGSNN/LEVNN on the first/first 20 eigenvalues with
 It the landscape function itself out performed the random potential about 10 times as well. 
 
 
-## Density of state (DOS) computation
+## 2. Density of state (DOS) computation
 ### Mathematical Setting
 Same as the case for the eigenvalue problem
 
@@ -79,7 +79,19 @@ We trained DOSNN on the first eigenvalues
 - Training for the $1/u$ case seems to be a little unstable.
 - Predictions of both NN seems to be concentrated near a few integers.
 
-## Data
+## 3. Data
 I removed all the data due to their large size. But they can be easity generated simply by running the data generation jupyter notebook
+
+
+## 4. Current direction
+- Train the neural network on 2D data
+- Train the neural network on various random potentials
+- Scale up DOS and compare with the usual box counting
+- Improving DOS by learning the deciding function in box counting
+- Studying regime in which the landscape starts to fail
+	- x% of the V max?
+	- what does the neural net actually learn about u that's better than V, if at all?
+- General: be more model specific, capture more leading order terms.
+
 
 
