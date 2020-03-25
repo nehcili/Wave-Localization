@@ -113,7 +113,9 @@ We trained a model of about 77,000 parameters to count eigenvalues of random pot
 
 <b>The mean square error (MSE) is approximately 5.0 after 7 epochs of training and it seems to have stablized.</b>
 
-Example graphs are given at the end of the file
+Example graphs in the folder EC_2 are shown for 10 randomly picked potentials.
+- BLUE LINE = prediction
+- ORANGE LINE = true eigenvalue counting
 
 ## 3. Data
 I removed all the data due to their large size. But they can be easity generated simply by running the data generation jupyter notebook
