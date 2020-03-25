@@ -45,14 +45,14 @@ We trained LGSNN/LEVNN on the first/first 20 eigenvalues with
 It the landscape function itself out performed the random potential about 10 times as well. 
 
 
-## 2. Density of state (DOS) computation
+## 2. Eigenvalue Counting
 ### Mathematical Setting
 Same as the case for the eigenvalue problem
 
 ### Data generation
 Same as the case for the eigenvalue problem
 
-### DOSNN (v1)
+### EC_1
 <b>Architecture</b>
 - Input = n
 - creates $3n$ box counting functions which counts # of boxes such that
@@ -78,6 +78,41 @@ We trained DOSNN on the first eigenvalues
 - The NN trained on both $1/u$ and $V$ performed equally well with a test mean squared error of 2 and train mean squared error < 1. 
 - Training for the $1/u$ case seems to be a little unstable.
 - Predictions of both NN seems to be concentrated near a few integers.
+
+### EC_2
+<b>Architecture</b>
+There are 2 ingredients:
+- <b>Decider.</b> The deciding function: a box is to be counted if $f(W-E) :=\inf (W - E) \leq 0$. We generalize this deciding function into a block in our neural net
+- <b>BoxCounter.</b> Choosing the approxiate side length $E^{-1/2}$. We simultaneously count on many boxes of various sizes and train the neural net to pick the correct side length
+
+ Decider block:
+
+ Input -- conv1d --> point-wise product <-- conv1d -- auxiliary input: (W, W^{-1}, W^{-2}, (W')^2 ,etc..)
+  |                     |
+  |                     | conv
+  |                     | 
+  |                     V
+  --------------------> +
+                        |
+                        |
+                        V  
+                     Output
+		     
+ BoxCounter:
+
+ Input --> Decider block --> ... --> Decider block --> conv1d --> ... --> conv1d --> Dense --> output
+              |                          |
+              |                          |
+        auxiliary input             auxiliary input
+
+
+### Observations
+<b>Results</b>
+We trained a model of about 77,000 parameters to count eigenvalues of random potentials on a 1D domain of size 1000. There are 200 training potentials each with 20 eigenvalues computed. The list of random potentials are given in randDistri.py.
+
+<b>The mean square error (MSE) is approximately 5.0 after 7 epochs of training and it seems to have stablized.</b>
+
+Example graphs are given at the end of the file
 
 ## 3. Data
 I removed all the data due to their large size. But they can be easity generated simply by running the data generation jupyter notebook
