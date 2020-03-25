@@ -85,6 +85,7 @@ There are 2 ingredients:
 - <b>Decider.</b> The deciding function: a box is to be counted if $f(W-E) :=\inf (W - E) \leq 0$. We generalize this deciding function into a block in our neural net
 - <b>BoxCounter.</b> Choosing the approxiate side length $E^{-1/2}$. We simultaneously count on many boxes of various sizes and train the neural net to pick the correct side length
 
+```
  Decider block:
 
  Input -- conv1d --> point-wise product <-- conv1d -- auxiliary input: (W, W^{-1}, W^{-2}, (W')^2 ,etc..)
@@ -104,7 +105,7 @@ There are 2 ingredients:
               |                          |
               |                          |
         auxiliary input             auxiliary input
-
+```
 
 ### Observations
 <b>Results</b>
