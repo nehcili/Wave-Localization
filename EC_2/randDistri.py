@@ -47,19 +47,23 @@ def gen(size):
     if i == 0:
         j = randint(len(NO_PARAM_DISTRI))
         res = NO_PARAM_DISTRI[j](size)
+        print(NO_PARAM_DISTRI[j])
     elif i == 1:
         j = randint(len(ONE_PARAM_DISTRI))
         a = 2*rand()+TINY
         res = ONE_PARAM_DISTRI[j](a, size)
+        print(ONE_PARAM_DISTRI[j])
     elif i == 2:
         j = randint(len(TWO_PARAM_DISTRI))
         a = 5*rand()+TINY
         b = rand()+TINY
         res = TWO_PARAM_DISTRI[j](a,b, size)
+        print(TWO_PARAM_DISTRI[j])
     else:
         j = randint(len(PROB_ONE_PARAM_DSITRI))
         p = rand()
         res = PROB_ONE_PARAM_DSITRI[j](p, size)
+        print(PROB_ONE_PARAM_DSITRI[j])
     
     res = np.maximum(res, 0)
     res = res/np.max(res)
