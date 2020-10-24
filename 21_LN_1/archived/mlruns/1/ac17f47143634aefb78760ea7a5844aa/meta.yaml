@@ -1,0 +1,15 @@
+artifact_uri: mlruns/1/ac17f47143634aefb78760ea7a5844aa/artifacts
+end_time: 1601088787494
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+name: ''
+run_id: ac17f47143634aefb78760ea7a5844aa
+run_uuid: ac17f47143634aefb78760ea7a5844aa
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1601088787449
+status: 3
+tags: []
+user_id: li
