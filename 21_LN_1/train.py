@@ -25,7 +25,7 @@ class NVEGenerator(tf.keras.utils.Sequence):
             data_idx: list,
             meta_batch_size: int,
             transformer=None,
-            shuffle=True
+            shuffle=True,
         ):
         super(NVEGenerator, self).__init__()
         self.data_idx = data_idx
@@ -98,12 +98,25 @@ def train(model, params):
     train_ds_path = os.path.join(params['ds_folder'], params['ds_name'], "train")
     val_ds_path = os.path.join(params['ds_folder'], params['ds_name'], "validation")
 
-    train_ds = NVEGenerator(train_ds_path, params['ds_name'],
-        params['train_idx'], meta_batch_size=params['train_batch_size'],
-        shuffle= params['shuffle'])
-    val_ds = NVEGenerator(val_ds_path, params['ds_name'],
-        params['val_idx'], meta_batch_size=params['val_batch_size'],
-        shuffle= params['shuffle'])
+    # deciding a full load or use NVEGenerator API to load
+    # data on the fly in pieces (to avoid memory overflow)
+    if params["full_load"]:
+        train_ds_prefix = os.path.join(train_ds_path, params['ds_name'])
+        train_ds = tf.data.Dataset.from_tensor_slices(
+            load_data_set(train_ds_prefix, params['train_idx'], shuffle=False))
+        train_ds = train_ds.batch(params['train_batch_size'])
+
+        val_ds_prefix = os.path.join(val_ds_path, params['ds_name'])
+        val_ds = tf.data.Dataset.from_tensor_slices(
+            load_data_set(val_ds_prefix, params['val_idx'], shuffle=False))
+        val_ds = val_ds.batch(params['val_batch_size'])
+    else:
+        train_ds = NVEGenerator(train_ds_path, params['ds_name'],
+            params['train_idx'], meta_batch_size=params['train_batch_size'],
+            shuffle= params['shuffle'])
+        val_ds = NVEGenerator(val_ds_path, params['ds_name'],
+            params['val_idx'], meta_batch_size=params['val_batch_size'],
+            shuffle= params['shuffle'])
 
 
     print("# Training and validation generator initialized")
@@ -147,9 +160,11 @@ def train(model, params):
     print("# continue training from epoch", latest_epoch)
 
     # Training
+    # Note:
+    # do not specify batch_size if data is generator or dataset
+    # shuffle is ignored if data set is a generator. shuffle by epoch end.
     history = model.fit(
         x=train_ds,
-        batch_size=params['train_batch_size'],
         epochs=params['epochs'],
         verbose=params["verbose"],
         callbacks=callbacks_list,

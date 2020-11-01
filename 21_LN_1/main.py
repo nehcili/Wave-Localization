@@ -6,25 +6,26 @@ import tensorflow as tf
 ###############################################################
 # Input variables
 ###############################################################
-#def percent_mse(y_true, y_pred):
-#    return tf.reduce_mean((y_true-y_pred)**2/(0.1*y_true**2 +1))
 
 # lr schedule
 def lr_schedule(epoch, lr):
-    if epoch < 10:
+    if epoch < 7:
         return 0.01
-    elif epoch < 20:
+    elif epoch < 14:
         return 0.001
     elif epoch > 45:
         return lr * 1.5
     else:
         return lr * 0.8
 
+def msle_se(y_true, y_pred, a=0.0005):
+    return tf.keras.losses.MSLE(y_true, y_pred) + a*tf.keras.losses.MSE(y_true, y_pred)
+
 
 params = {
     # model params
-    "model_class" : "cnn_dense",
-    "model_name" : "cnn_dense",
+    "model_class" : "cnn_dense_0",
+    "model_name" : "update_test_cnn_dense",
     "model_folder_path" : "models",
     "pchoice" : [0,1], # [0,1] = V, [1,2] = W, [0,2] = [V,W]
 
@@ -33,6 +34,7 @@ params = {
     "ds_name" : "discrete_10000",
     "train_idx" : list(range(500)), # np 1D array
     "val_idx" : list(range(50)),
+    "full_load" : False, # load all data into memory at once
 
     # io/checkpointing
     "ckpt_filename" : "cp-{epoch:04d}-{val_loss:.2f}.ckpt",
@@ -43,12 +45,12 @@ params = {
     'lr_schedule' : lr_schedule,
 
     # training params
-    "epochs" : 50,
-    "train_batch_size" : 25,
-    "val_batch_size" : 25,
+    "epochs" : 20,
+    "train_batch_size" : 25, # this is meta batch_size, each batch has 20 data points
+    "val_batch_size" : 25, # this is meta batch_size, each batch has 20 data points
     "shuffle" : True, # shuffle per epoch
-    "loss_description" : "mean squared error",
-    "loss" : "mse",
+    "loss_description" : "mean squared log error + mean squared error",
+    "loss" : msle_se,
     "optimizer_description" : "adam",
     "learning_rate" : 0.001, # have to write this in the learning_rate of optimizer
     "clipnorm" : 0.1,
@@ -67,74 +69,11 @@ params = {
 # Training
 ###############################################################
 
-# cnn_landscape
-# print("\n CNN landscape\n")
-# print("\n# V potential\n")
-# params['pchoice'] = [0,1]
-# params['model_name'] = 'cnn_landscape_V'
-# model = iomodel.create_model(params)
-# model.summary()
-# train(model, params)
-#
-# print("\n# W potential\n")
-# params['pchoice'] = [1,2]
-# params['model_name'] = 'cnn_landscape_W'
-# model = iomodel.create_model(params)
-# model.summary()
-# train(model, params)
-#
-# print("\n# V and W potential\n")
-# params['pchoice'] = [0,2]
-# params['model_name'] = 'cnn_landscape_VW'
-# model = iomodel.create_model(params)
-# model.summary()
-# train(model, params)
-
-# discrete_10000_ec_2
-print("\n# model class discrete_10000_ec_2\n")
+# test
+print("\n Test\n")
 print("\n# VW potential\n")
-params['pchoice'] = [0,1]
-params['model_class'] = 'discrete_10000_ec_2'
-params['model_name'] = 'discrete_10000_ec_2_VW'
-model = iomodel.create_model(params)
-model.summary()
-train(model, params)
-
-
-# cnn_dense
-def lrs(epoch, lr):
-    if epoch < 10:
-        return 0.001
-    elif epoch < 20:
-        return 0.0001
-    elif epoch > 45:
-        return lr * 1.5
-    else:
-        return lr * 0.8
-
-params['lr_schedule'] = lrs
-
-print('\n# model class cnn_dense\n')
-print("\n# V potential\n")
-params['model_class'] = 'cnn_dense_0'
-params['pchoice'] = [0,1]
-params['model_name'] = 'cnn_dense_0_V'
-model = iomodel.create_model(params)
-model.summary()
-train(model, params)
-
-
-
-print("\n# W potential\n")
-params['pchoice'] = [1,2]
-params['model_name'] = 'cnn_dense_0_W'
-model = iomodel.create_model(params)
-model.summary()
-train(model, params)
-
-print("\n# V and W potential\n")
-params['pchoice'] = [0,2]
-params['model_name'] = 'cnn_dense_0_VW'
+params['pchoice'] = [0,2]   
+params['model_name'] = 'test3'
 model = iomodel.create_model(params)
 model.summary()
 train(model, params)
@@ -144,7 +83,7 @@ train(model, params)
 ###############################################################
 # Visual Analysis
 ###############################################################
-visualize = False
+visualize = True
 if visualize:
     import NVEplot as nplt
     import numpy as np
