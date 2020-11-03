@@ -1,0 +1,15 @@
+#Create environment using:
+#$ conda env create --file=file-name.yml
+#We assume the environment has a gpu
+name: wave-localization
+channels:
+- conda-forge
+- defaults
+dependencies:
+- python=3.7.7
+- matplotlib==3.1.2
+- tensorflow==2.2.0
+- numpy==1.19.1
+
+- pip:
+- mlflow==1.11.0  
